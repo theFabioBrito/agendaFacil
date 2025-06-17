@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda Fácil - ToDo List</title>
+</head>
+<body>
+    <h1>Minhas Tarefas</h1>
+
+    <!-- Formulário para adicionar nova tarefa -->
+    <form th:action="@{/tasks}" method="post" th:object="${task}">
+        <label for="title">Título:</label>
+        <input type="text" id="title" th:field="*{title}" required>
+
+        <label for="description">Descrição:</label>
+        <input type="text" id="description" th:field="*{description}">
+
+        <label for="dueDate">Data e Hora:</label>
+        <input type="datetime-local" id="dueDate" th:field="*{dueDate}" required>
+
+        <button type="submit">Adicionar</button>
+    </form>
+
+    <hr>
+
+    <h2>Tarefas</h2>
+    <ul>
+        <li th:each="task : ${tasks}">
+            <strong th:text="${task.title}">Título</strong> - 
+            <span th:text="${task.description}">Descrição</span> - 
+            <span th:text="${#temporals.format(task.dueDate, 'dd/MM/yyyy HH:mm')}">Data</span> - 
+            <span th:text="${task.completed} ? 'Concluída' : 'Pendente'">Status</span>
+
+            <form th:action="@{'/tasks/delete/' + ${task.id}}" method="post" style="display:inline;">
+                <button type="submit">Excluir</button>
+            </form>
+        </li>
+    </ul>
+
+    <a href="/logout">Sair</a>
+</body>
+</html>
